@@ -21,16 +21,22 @@ var drivers = firebase.database().ref('stores/borza/drivers');
 
 storeRef.on('value', function(snapshot) {
   store = snapshot.val();
-  console.log(snapshot.val())
+  console.log(snapshot.val());
+  watchDriver();
 });
 
 var watchDriver = function(){
-    drivers.on('child_changed', function(data) {
+    drivers.on('value', function(data) {
       console.log(data.val());
-      var driver = data.val();
-      var latlng = new google.maps.LatLng(driver.position.lat, driver.position.long);
-      calcRoute(driver, store)
-      updatePin(latlng)
+      var driversArray = data.val();
+
+      for (var i = driversArray.length - 1; i >= 0; i--) {
+      	driversArray[i]
+      	var latlng = new google.maps.LatLng(driversArray[i].position.lat, driversArray[i].position.long);
+	      calcRoute(driversArray[i])
+	      updatePin(latlng)
+      }
+      
     });
 }
 
@@ -45,7 +51,7 @@ var updatePin = function(latLng){
 }
 
 
-function calcRoute(driver,store) {
+function calcRoute(driver) {
 	console.log('running calcRoute', driver, store);
   var start = driver.position.lat + ", "+ driver.position.long;
   var end = store.location.lat + ", " + store.location.long;
