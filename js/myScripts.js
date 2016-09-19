@@ -1,5 +1,6 @@
 var map;
 var directionsService = new google.maps.DirectionsService();
+var driverMarker = new google.maps.Marker();
 
 var loadMap = function(){
   var mapDiv = document.getElementById('map');
@@ -13,6 +14,8 @@ var loadMap = function(){
     position: {lat: 53.252751, lng: -6.213784 },
     map: map
   });
+
+  driverMarker.setMap(map);
 }
 
 var startMagic = function(){
@@ -48,10 +51,7 @@ var startMagic = function(){
 
 	var updatePin = function(latLng){
 		console.log('updating pin');
-		var marker = new google.maps.Marker({
-	        map: map,
-	        position: latLng
-	    });
+		driverMarker.setPosition(latLng)
 	}
 
 
