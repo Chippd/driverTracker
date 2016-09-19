@@ -4,12 +4,20 @@ var loadMap = function(){
   var mapDiv = document.getElementById('map');
   map = new google.maps.Map(mapDiv, {
       center: {lat: 53.252751, lng: -6.213784 },
-      zoom: 8
+      zoom: 11
+  });
+
+
+  var homeMarker = new google.maps.Marker({
+    position: {lat: 53.252751, lng: -6.213784 },
+    map: map
   });
 }
 
 var store = firebase.database().ref('stores/borza');
 var drivers = firebase.database().ref('stores/borza/drivers');
+
+
 
 var watchDriver = function(){
     drivers.on('child_changed', function(data) {
