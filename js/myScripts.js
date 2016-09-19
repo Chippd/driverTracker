@@ -1,6 +1,6 @@
 var map;
 var directionsService = new google.maps.DirectionsService();
-var driverMarker = new google.maps.Marker();
+var markers = [];
 
 var loadMap = function(){
   var mapDiv = document.getElementById('map');
@@ -15,49 +15,82 @@ var loadMap = function(){
     map: map
   });
 
-  driverMarker.setMap(map);
 }
 
-var startMagic = function(){
+function addMarker(driver, location) {
+	var marker = new google.maps.Marker({
+	  position: location,
+	  map: map,
+	  driver: driver
+	});
+	markers.push(marker);
+}
 
+var updateMarker = function(driver, latLng){
+	console.log('updating pin:', driver);
+	for (var i = 0; i < markers.length; i++) {
+		if(markers[i].driver == driver){
+			//update this pin
+			markers[i].setPosition(latLng)
+		}
+	}
+}
+
+
+var startMagic = function(){
 
 	var store;
 	var storeRef = firebase.database().ref('stores/borza');
 	var drivers = firebase.database().ref('stores/borza/drivers');
 
-	storeRef.on('value', function(snapshot) {
+	//get store details
+	storeRef.once('value').then(function(snapshot) {
 	  store = snapshot.val();
 	  console.log(snapshot.val());
 	  watchDrivers();
 	});
 
+
+	//get drivers once for adding pins
+	drivers.once('value').then(function(snapshot){
+		var driversObj = snapshot.val()
+		for (var driver in driversObj ) {
+			if (driversObj.hasOwnProperty(driver)) {
+				//add marker
+				var latlng = new google.maps.LatLng(driversObj[driver].locationObj.latitude, driversObj[driver].locationObj.longitude);
+				addMarker(driver, latlng);
+
+				//add html element
+				var p = document.createElement("P");
+				p.id = 'driver_'+driver;
+				document.getElementById("drivers").appendChild(p); 
+			}
+		}
+	})
+
+	//watch drivers for changes
 	var watchDrivers = function(){
-	    drivers.on('value', function(data) {
-	      console.log(data.val());
-	      var driversObj = data.val();
+		drivers.on('value', function(data) {
+	    console.log("drivers object change:",data.val());
+	    var driversObj = data.val();
 
-	      for (var driver in driversObj) {
-				  if (driversObj.hasOwnProperty(driver)) {
-				    console.log(" -> " + JSON.stringify(driversObj[driver]));
+	    for (var driver in driversObj) {
+			  if (driversObj.hasOwnProperty(driver)) {
+			    console.log(" -> " + JSON.stringify(driversObj[driver]));
 
-						var latlng = new google.maps.LatLng(driversObj[driver].latitude, driversObj[driver].longitude);
-						calcRoute(driversObj[driver])
-						updatePin(latlng)
-				  }
-				}
-	    });
+					var latlng = new google.maps.LatLng(driversObj[driver].locationObj.latitude, driversObj[driver].locationObj.longitude);
+					calcRoute(driver, driversObj[driver])
+					updateMarker(driver, latlng)
+			  }
+			}
+		})
 	}
+  
 
 
-	var updatePin = function(latLng){
-		console.log('updating pin');
-		driverMarker.setPosition(latLng)
-	}
-
-
-	function calcRoute(driver) {
-		console.log('running calcRoute', driver, store);
-	  var start = driver.latitude + ", "+ driver.longitude;
+	function calcRoute(driverName, driverObj) {
+		console.log('running calcRoute', driverName, driverObj, store);
+	  var start = driverObj.locationObj.latitude + ", "+ driverObj.locationObj.longitude;
 	  var end = store.location.lat + ", " + store.location.long;
 	  console.log('start:', start, "end:", end)
 	  var request = {
@@ -70,8 +103,8 @@ var startMagic = function(){
 	    if (status == 'OK') {
 	    	var point = result.routes[ 0 ].legs[ 0 ];
 	    	var eta = point.duration.text;
-	    	var updated = new Date(driver.time);
-	      document.getElementById('driverChris').innerHTML = driver.driverName + " is "+ eta + " away. Updated: " + updated.getHours() + ":" + updated.getMinutes();
+	    	var updated = new Date(driverObj.locationObj.time);
+	      document.getElementById('driver_'+driverName).innerHTML = driverName + " is "+ eta + " away. Updated: " + updated.getHours() + ":" + updated.getMinutes();
 
 	    }
 	  });
