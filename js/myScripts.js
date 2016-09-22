@@ -10,10 +10,10 @@ var loadMap = function(){
   });
 
 
-  var homeMarker = new google.maps.Marker({
-    position: {lat: 53.252751, lng: -6.213784 },
-    map: map
-  });
+  // var homeMarker = new google.maps.Marker({
+  //   position: {lat: 53.252751, lng: -6.213784 },
+  //   map: map
+  // });
 
 }
 
@@ -113,6 +113,7 @@ var startMagic = function(){
 	}
 
 }
+
 
 // function CustomMarker(latlng, map, args) {
 // 	this.latlng = latlng;	
