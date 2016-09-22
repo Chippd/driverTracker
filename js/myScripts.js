@@ -53,17 +53,28 @@ var startMagic = function(){
 
 	//get drivers once for adding pins
 	drivers.once('value').then(function(snapshot){
-		var driversObj = snapshot.val()
+		var driversObj = snapshot.val();
+
+		console.log(driversObj);
 		for (var driver in driversObj ) {
 			if (driversObj.hasOwnProperty(driver)) {
 				//add marker
+				// console.log('driver:', typeof driver)
 				var latlng = new google.maps.LatLng(driversObj[driver].locationObj.latitude, driversObj[driver].locationObj.longitude);
 				addMarker(driver, latlng);
 
+				//assign name
+				driversObj[driver].name = driver
+
 				//add html element
-				var p = document.createElement("P");
-				p.id = 'driver_'+driver;
-				document.getElementById("drivers").appendChild(p); 
+				var source   = $("#driver-template").html();
+				var template = Handlebars.compile(source);
+				var html = template(driversObj[driver]);
+
+				$('#drivers').append(html);
+				// var p = document.getElementById("driverPanel");
+				// p.id = 'driver_'+driver;
+				// document.getElementById("drivers").appendChild(p); 
 			}
 		}
 	})
@@ -103,11 +114,17 @@ var startMagic = function(){
 	    if (status == 'OK') {
 	    	var point = result.routes[ 0 ].legs[ 0 ];
 	    	var eta = point.duration.text;
-	    	// var updated = new Date(driverObj.locationObj.time);
 	    	var updated = (new Date().getTime() - driverObj.locationObj.time);
 	    	updated = Math.round(((updated % 86400000) % 3600000) / 60000);
-	      // document.getElementById('driver_'+driverName).innerHTML = driverName + " is "+ eta + " away. Updated: " + updated.getHours() + ":" + updated.getMinutes();
-	      document.getElementById('driver_'+driverName).innerHTML = driverName + " is "+ eta + " away. Updated: " + updated + " mins ago";
+	    	if(updated == 0 ){
+	    		updated = "Less than a minute ago"
+	    	} else {
+	    		updated += " mins ago"
+	    	}
+
+	    	$('#driverPanel_'+driverName).find(".eta").text(eta + " away. Updated: " + updated);
+	    	$('#driverPanel_'+driverName).find(".status").text(driverObj.status);
+	      // document.getElementById('driver_'+driverName).innerHTML = driverName + " is "+ eta + " away. Updated: " + updated;
 	    }
 	  });
 	}
