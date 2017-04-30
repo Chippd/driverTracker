@@ -10,7 +10,9 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Driver tracker beta</title>
+    <title>My Delivery Pal</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -42,40 +44,59 @@
       </div>
     </nav> -->
 
-    <div class="container">
+    <div class="container-fluid">
 
-      <div class="starter-template">
-        <div id="map">
-          
+
+      <div class="row row-header text-center">
+        <div class="title center-block">
+          <!-- <h1>Deliveries.<br>Fixed.</h1> -->
+          <h1>Driver Tracking and delivery management for takeaways</h1>
         </div>
-        <div id="drivers" style="margin-top:30px">
-        
+      </div>
+
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h2>Benefits</h2>
+          <p>
+            Less customer calls… somehow
+            Happier drivers
+            Food ready for them when they get back to store
+            More deliveries, optimised route
+
+            Don’t worry about driver churn
+            Let new drivers download your database as they join
+            Optimised route
+            More efficient workflow, keep drivers on the road more
+            Happier customers. Food is hotter, fresher, deliveries quicker
+
+          </p>
         </div>
- 
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h2>Features</h2>
+          <p>
+            Track drivers
+            Watch as they fulfill deliveries.
+            Know how far they are away to the minute
+            Route optimisation
+            Google Maps integration
+            Never have a driver get lost or take the long way round
+            Detailed reporting
+            See who your best drivers are
+            Identify nights you’re overstaffed
+            Capture local knowledge
+            Centrally managed address database in the cloud, controlled by you
+            As drivers add addresses, update locations and add hints, it’s synced to your database
+
+
+          </p>
+        </div>
       </div>
 
     </div><!-- /.container -->
-
-    <script>
-      window.onload = function(){
-        loadMap();
-        startMagic();
-      }
-    </script>
-
-
-    <script id="driver-template" type="text/x-handlebars-template">
-        <div id="driverPanel_{{name}}" type="text">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                  <h1>{{name}}</h1>
-                  <p class="status">{{status}}</p>
-                  <p class="eta"></p>
-                </div>
-            </div>
-        </div>
-    </script>
-
 
 
     <!-- Bootstrap core JavaScript
@@ -85,23 +106,10 @@
 
     <script src="/js/bootstrap.min.js"></script>
 
-    <script src="js/firebase.js"></script>
+    <!-- <script src="js/firebase.js"></script> -->
 
-    <script src="js/handlebars.min-latest.js"></script>
+    <!-- <script src="js/handlebars.min-latest.js"></script> -->
 
-    
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyAM84gi56pwo_sZ4mTr7U-vTA-uaF-MEXU",
-        authDomain: "driver-tracker-ec964.firebaseapp.com",
-        databaseURL: "https://driver-tracker-ec964.firebaseio.com",
-        storageBucket: "driver-tracker-ec964.appspot.com",
-        messagingSenderId: "572240367318"
-      };
-      firebase.initializeApp(config);
-    </script>
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyBDpE1Xc7_CJqBhRVi8A1FwmidNM1VaVGw"></script>
     <script src="js/myScripts.js"></script>
   </body>
 </html>

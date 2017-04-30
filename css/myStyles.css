@@ -1,4 +1,44 @@
-#map {
-        width: 100%;
-        height: 400px;
-     }
+
+
+
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-family: 'Lato', sans-serif;
+}
+
+
+
+
+
+
+.row-header {
+	background-image: url(../headerimg1.png);
+	background-size: cover;
+	background-position: bottom;
+	background-repeat: no-repeat;
+	height: 400px;
+	width: 100vw;
+	display: flex;
+	align-items: flex-end;
+	margin-bottom:40px;
+}
+
+.row-header .title {
+	margin-bottom:-20px;
+	background: white;
+	padding:10px;
+	max-width:80vw;
+	bottom:0px;
+	box-shadow: 0px 2px 3px 1px rgb(216, 216, 216);
+	padding: 20px 10px;
+}
+
+.row-header .title h1 {
+	margin:0;
+	font-size:2.5em;
+}
